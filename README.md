@@ -1,35 +1,81 @@
-# 📁 Project Management Tool (PMT)
+# 🧠 Jira-Inspired Project Management Platform (Full-Stack Clone)
 
-A full-stack project management web application built with **Spring Boot**, **React**, **MongoDB**, and modern UI libraries like **Tailwind CSS**, **ShadCN UI**, and **Redux** for state management. Designed for real-time project planning, task tracking, and team collaboration.
+A next-gen project management tool inspired by **Jira**, **ClickUp**, and **Linear**, built for real-time team collaboration and agile productivity.  
 
----
-
-## 📌 Description
-
-PMT streamlines project workflows by providing features like task scheduling, Gantt charts, team member assignments, and real-time updates. It enhances transparency and efficiency across development teams, helping deliver projects on time with better resource allocation.
+![UI Preview](link-to-screenshot-or-gif)
 
 ---
 
-## 🚀 Tech Stack
+## 🛠️ Tech Stack
 
-- **Frontend:** React, Tailwind CSS, ShadCN UI, Redux Toolkit
-- **Backend:** Java, Spring Boot (REST API)
-- **Database:** MongoDB (NoSQL)
-- **Auth:** JWT-based authentication with Spring Security
-
----
-
-## ✅ Key Features
-
-- 🔐 User Authentication & Role-Based Access (Admin, Manager, Member)
-- 📁 Project & Task Management (CRUD operations)
-- 📅 Gantt Chart Integration
-- 🔔 Notification System
-- 🧑‍💼 Team & Resource Allocation
-- 📊 Dashboard Overview (React + Redux)
-- 💬 Real-Time Collaboration Ready (WebSocket-ready structure)
+- **Frontend**: React.js, TailwindCSS / Material UI, React Router, Redux / Context API  
+- **Backend**: Node.js, Express.js, Socket.io, JWT Auth, REST API  
+- **Database**: MongoDB with aggregation pipelines  
+- **Real-time**: WebSockets via Socket.io  
 
 ---
 
-## 📂 Project Structure
+## ✨ Key Features
 
+### 🧩 Issue & Task Management
+- Create & manage Projects → Epics → Tasks → Subtasks  
+- Custom statuses, labels, priority, attachments  
+- Relationships: blockers, dependencies  
+
+### 🧠 Workflow & Boards
+- Kanban & Scrum Boards (Sprint / Backlog / WIP Limits)  
+- Drag-and-drop Custom Workflow Builder  
+- Swimlanes (Assignee, Epic, Priority)  
+- Condition-based transitions & automation  
+
+### 💬 Real-Time Team Collaboration
+- Live editing of task details and descriptions  
+- Presence indicators (see who’s online)  
+- Typing indicators, comment syncing, live @mentions  
+- Real-time drag & drop with instant board updates  
+- Smart conflict resolution  
+
+### 🧮 Reports & Dashboards
+- Sprint Burndown/Burnup, Velocity, Control Charts  
+- Time tracking reports  
+- Custom Dashboards with widgets  
+
+### 🛎️ Notifications System
+- Email and in-app notifications  
+- Watchers and followers per task  
+- Mention alerts  
+
+### 🔐 Authentication & Roles
+- JWT auth with role-based access (Admin, Manager, Member)  
+
+### 📅 Project Planning
+- Backlog grooming, epic grouping, release tagging  
+- Calendar & Gantt-style timeline view  
+
+---
+
+## 📦 Bonus Features
+- Dark/Light mode toggle  
+- Global search (tasks, users, projects)  
+- Export to CSV/PDF  
+- Project templates  
+- Admin Panel  
+
+---
+
+## 🧑‍💻 Getting Started
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/jira-clone.git
+cd jira-clone
+
+# Install backend
+cd server
+npm install
+npm run dev
+
+# Install frontend
+cd ../client
+npm install
+npm start
