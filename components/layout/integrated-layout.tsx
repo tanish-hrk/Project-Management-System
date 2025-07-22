@@ -19,7 +19,7 @@ export function IntegratedLayout({ children }: IntegratedLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative w-full overflow-x-hidden">
       {/* Animated Grid Background */}
       <AnimatedBackground />
 
@@ -30,8 +30,8 @@ export function IntegratedLayout({ children }: IntegratedLayoutProps) {
       <TransparentTabBar onSidebarToggle={handleSidebarToggle} sidebarOpen={sidebarOpen} />
 
       {/* Main Content */}
-      <main className="pt-16 transition-all duration-300 relative z-10">
-        <div className="min-h-[calc(100vh-4rem)]">{children}</div>
+      <main className="pt-16 transition-all duration-300 relative z-10 w-full">
+        <div className="min-h-[calc(100vh-4rem)] w-full">{children}</div>
       </main>
     </div>
   )

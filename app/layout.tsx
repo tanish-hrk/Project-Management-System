@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider"
 import { SocketProvider } from "@/components/providers/socket-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { SidebarProvider } from "@/components/ui/sidebar"
+import { IntegratedLayout } from "@/components/layout/integrated-layout"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -26,7 +27,9 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <SidebarProvider>
             <SocketProvider>
-              {children}
+              <IntegratedLayout>
+                {children}
+              </IntegratedLayout>
               <Toaster />
             </SocketProvider>
           </SidebarProvider>

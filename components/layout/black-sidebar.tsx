@@ -332,6 +332,7 @@ export function BlackSidebar({ isOpen, onToggle, className }: BlackSidebarProps)
                 variant="ghost"
                 size="sm"
                 className="w-full justify-start text-gray-400 hover:text-white hover:bg-gray-800"
+                onClick={() => handleNavClick("/profile")}
               >
                 <User className="h-4 w-4 mr-3" />
                 Profile

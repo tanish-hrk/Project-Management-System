@@ -16,6 +16,7 @@ import { GlobalSearch } from "./global-search"
 import { QuickProjectBar } from "./quick-project-bar"
 import { Menu, Bell, Settings, User, LogOut, ChevronDown, Zap } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
 
 interface TransparentTabBarProps {
   onSidebarToggle: () => void
@@ -24,6 +25,7 @@ interface TransparentTabBarProps {
 
 export function TransparentTabBar({ onSidebarToggle, sidebarOpen }: TransparentTabBarProps) {
   const [mounted, setMounted] = useState(false)
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true)
@@ -116,7 +118,7 @@ export function TransparentTabBar({ onSidebarToggle, sidebarOpen }: TransparentT
               <DropdownMenuContent align="end" className="w-56 bg-black/95 border-gray-700 text-white">
                 <DropdownMenuLabel className="text-gray-300">My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-gray-700" />
-                <DropdownMenuItem className="focus:bg-gray-800 cursor-pointer">
+                <DropdownMenuItem className="focus:bg-gray-800 cursor-pointer" onClick={() => router.push("/profile")}>
                   <User className="mr-2 h-4 w-4" />
                   <span>Profile</span>
                 </DropdownMenuItem>
