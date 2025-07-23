@@ -180,9 +180,7 @@ export function BlackSidebar({ isOpen, onToggle, className }: BlackSidebarProps)
   const handleNavClick = (url?: string) => {
     if (url) {
       router.push(url);
-      if (isMobile) {
         onToggle();
-      }
     }
   }
 
@@ -321,6 +319,7 @@ export function BlackSidebar({ isOpen, onToggle, className }: BlackSidebarProps)
                 variant="ghost"
                 size="sm"
                 className="w-full justify-start text-gray-400 hover:text-white hover:bg-gray-800"
+                onClick={() => handleNavClick("/notification")}
               >
                 <Bell className="h-4 w-4 mr-3" />
                 Notifications

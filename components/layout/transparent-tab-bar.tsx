@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { GlobalSearch } from "./global-search"
 import { QuickProjectBar } from "./quick-project-bar"
+import { NotificationDropdown } from "./notification-dropdown"
 import { Menu, Bell, Settings, User, LogOut, ChevronDown, Zap } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
@@ -84,19 +85,7 @@ export function TransparentTabBar({ onSidebarToggle, sidebarOpen }: TransparentT
           {/* Right Section */}
           <div className="flex items-center gap-3">
             {/* Notifications */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 w-8 p-0 text-white/70 hover:text-white hover:bg-white/10 relative"
-            >
-              <Bell className="h-4 w-4" />
-              <Badge
-                variant="destructive"
-                className="absolute -top-1 -right-1 h-4 w-4 p-0 text-xs flex items-center justify-center"
-              >
-                3
-              </Badge>
-            </Button>
+            <NotificationDropdown />
 
             {/* Quick Actions */}
             <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-white/70 hover:text-white hover:bg-white/10">
@@ -122,7 +111,7 @@ export function TransparentTabBar({ onSidebarToggle, sidebarOpen }: TransparentT
                   <User className="mr-2 h-4 w-4" />
                   <span>Profile</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="focus:bg-gray-800 cursor-pointer">
+                <DropdownMenuItem className="focus:bg-gray-800 cursor-pointer" onClick={() => router.push("/settings")}>
                   <Settings className="mr-2 h-4 w-4" />
                   <span>Settings</span>
                 </DropdownMenuItem>

@@ -416,16 +416,16 @@ export default function TimeTrackingPage() {
                 <div className="flex gap-2">
                   {entry.status === "running" && (
                     <>
-                      <Button variant="outline" size="sm" className="border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10">
+                      <Button variant="light" size="sm" className="border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10">
                         <Pause className="h-4 w-4" />
                       </Button>
-                      <Button variant="outline" size="sm" className="border-red-500/30 text-red-400 hover:bg-red-500/10">
+                      <Button variant="light" size="sm" className="border-red-500/30 text-red-400 hover:bg-red-500/10">
                         <Square className="h-4 w-4" />
                       </Button>
                     </>
                   )}
                   {entry.status === "completed" && (
-                    <Button variant="outline" size="sm" className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10">
+                    <Button variant="light" size="sm" className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10">
                       <Play className="h-4 w-4" />
                     </Button>
                   )}

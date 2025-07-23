@@ -24,7 +24,7 @@ export function ProfileTabs({ tabs }: ProfileTabsProps) {
             <TabsTrigger
               key={tab.id}
               value={tab.id}
-              className="data-[state=active]:border-b-2 data-[state=active]:border-blue-400 data-[state=active]:shadow-none rounded-none px-4 text-gray-300 data-[state=active]:text-white"
+              className="data-[state=active]:border-b-2 data-[state=active]:border-blue-400 data-[state=active]:shadow-none rounded-none px-4 text-gray-300 data-[state=active]:text-blue"
             >
               {tab.label}
             </TabsTrigger>

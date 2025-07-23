@@ -126,13 +126,12 @@ export default function SettingsPage() {
                   <AvatarFallback className="bg-blue-600 text-white text-lg">JD</AvatarFallback>
                 </Avatar>
                 <div className="space-y-2">
-                  <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+                  <Button variant="light" className="border-white/20 text-white hover:bg-white/10">
                     Change Avatar
                   </Button>
                   <p className="text-sm text-gray-400">JPG, PNG or GIF. Max size 2MB.</p>
                 </div>
               </div>
-
               <Separator className="bg-white/20" />
 
               {/* Basic Info */}
@@ -216,7 +215,7 @@ export default function SettingsPage() {
                       </Button>
                     </Badge>
                   ))}
-                  <Button variant="outline" size="sm" className="border-white/20 text-white hover:bg-white/10">
+                  <Button variant="light" size="sm" className="border-white/20 text-white hover:bg-white/10">
                     + Add Skill
                   </Button>
                 </div>
@@ -465,7 +464,7 @@ export default function SettingsPage() {
                   </div>
                   <Badge className="bg-green-500/20 text-green-400">Enabled</Badge>
                 </div>
-                <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+                <Button variant="light" className="border-white/20 text-white hover:bg-white/10">
                   Configure 2FA
                 </Button>
               </div>
@@ -490,7 +489,7 @@ export default function SettingsPage() {
                           <Badge className="bg-green-500/20 text-green-400">Current</Badge>
                         )}
                         {!session.current && (
-                          <Button variant="outline" size="sm" className="border-red-500/50 text-red-400 hover:bg-red-500/20">
+                          <Button variant="light" size="sm" className="border-red-500/50 text-red-400 hover:bg-red-500/20">
                             Revoke
                           </Button>
                         )}
@@ -570,15 +569,15 @@ export default function SettingsPage() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-white">Data & Privacy</h3>
                 <div className="space-y-3">
-                  <Button variant="outline" className="w-full justify-start border-white/20 text-white hover:bg-white/10">
+                  <Button variant="light" className="w-full justify-start border-white/20 text-white hover:bg-white/10">
                     <Download className="h-4 w-4 mr-2" />
                     Download Your Data
                   </Button>
-                  <Button variant="outline" className="w-full justify-start border-white/20 text-white hover:bg-white/10">
+                  <Button variant="light" className="w-full justify-start border-white/20 text-white hover:bg-white/10">
                     <Eye className="h-4 w-4 mr-2" />
                     Privacy Policy
                   </Button>
-                  <Button variant="outline" className="w-full justify-start border-red-500/50 text-red-400 hover:bg-red-500/20">
+                  <Button variant="light" className="w-full justify-start border-red-500/50 text-red-400 hover:bg-red-500/20">
                     <Trash2 className="h-4 w-4 mr-2" />
                     Delete Account
                   </Button>
@@ -619,10 +618,10 @@ export default function SettingsPage() {
                       {integration.connected ? (
                         <>
                           <Badge className="bg-green-500/20 text-green-400">Connected</Badge>
-                          <Button variant="outline" size="sm" className="border-white/20 text-white hover:bg-white/10">
+                          <Button variant="light" size="sm" className="border-white/20 text-white hover:bg-white/10">
                             Configure
                           </Button>
-                          <Button variant="outline" size="sm" className="border-red-500/50 text-red-400 hover:bg-red-500/20">
+                          <Button variant="light" size="sm" className="border-red-500/50 text-red-400 hover:bg-red-500/20">
                             Disconnect
                           </Button>
                         </>
@@ -646,7 +645,7 @@ export default function SettingsPage() {
                       <p className="text-white font-medium">Personal Access Token</p>
                       <p className="text-sm text-gray-400">For API access and custom integrations</p>
                     </div>
-                    <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+                    <Button variant="light" className="border-white/20 text-white hover:bg-white/10">
                       <Key className="h-4 w-4 mr-2" />
                       Generate Token
                     </Button>
@@ -656,7 +655,7 @@ export default function SettingsPage() {
                       <p className="text-white font-medium">Webhook URLs</p>
                       <p className="text-sm text-gray-400">Configure webhooks for external notifications</p>
                     </div>
-                    <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+                    <Button variant="light" className="border-white/20 text-white hover:bg-white/10">
                       <Globe className="h-4 w-4 mr-2" />
                       Manage Webhooks
                     </Button>
