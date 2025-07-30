@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Slf4j
-@Component
+// @Slf4j
+// @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override

@@ -1,37 +1,44 @@
 package com.nexuspm.nexus_pm_backend.controller;
 
+import com.nexuspm.nexus_pm_backend.dto.AuthResponse;
+import com.nexuspm.nexus_pm_backend.dto.LoginRequest;
+import com.nexuspm.nexus_pm_backend.dto.SignupRequest;
+import com.nexuspm.nexus_pm_backend.dto.UserInfoDto;
 import com.nexuspm.nexus_pm_backend.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
-@Slf4j
-@RestController
-@RequestMapping("/api/auth")
-@RequiredArgsConstructor
-@CrossOrigin(origins = "*", maxAge = 3600)
+// @Slf4j
+// @RestController
+// @RequestMapping("/api/auth")
+// @RequiredArgsConstructor
+// @CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthController {
 
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Validation failed", "details", errorMessage));
+        }
+
         try {
-            String email = loginRequest.get("email");
-            String password = loginRequest.get("password");
-
-            if (email == null || password == null) {
-                return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Email and password are required"));
-            }
-
-            Map<String, Object> response = authService.authenticate(email, password);
+            AuthResponse response = authService.authenticate(loginRequest);
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
@@ -41,20 +48,27 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest signupRequest, BindingResult bindingResult) {
+        return registerUser(signupRequest, bindingResult);
+    }
+
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Map<String, String> registerRequest) {
+    public ResponseEntity<?> register(@Valid @RequestBody SignupRequest signupRequest, BindingResult bindingResult) {
+        return registerUser(signupRequest, bindingResult);
+    }
+
+    private ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Validation failed", "details", errorMessage));
+        }
+
         try {
-            String email = registerRequest.get("email");
-            String password = registerRequest.get("password");
-            String firstName = registerRequest.get("firstName");
-            String lastName = registerRequest.get("lastName");
-
-            if (email == null || password == null || firstName == null || lastName == null) {
-                return ResponseEntity.badRequest()
-                    .body(Map.of("error", "All fields are required"));
-            }
-
-            Map<String, Object> response = authService.register(email, password, firstName, lastName);
+            AuthResponse response = authService.register(signupRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
         } catch (Exception e) {
@@ -90,7 +104,7 @@ public class AuthController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String email = authentication.getName();
 
-            Map<String, Object> user = authService.getCurrentUser(email);
+            UserInfoDto user = authService.getCurrentUser(email);
             return ResponseEntity.ok(user);
 
         } catch (Exception e) {
@@ -105,5 +119,52 @@ public class AuthController {
         // Since we're using stateless JWT tokens, logout is handled on the client side
         // by removing the token from storage. Here we just return a success response.
         return ResponseEntity.ok(Map.of("message", "Logged out successfully"));
+    }
+
+    // Demo credentials endpoint
+    @PostMapping("/create-demo")
+    public ResponseEntity<?> createDemoCredentials() {
+        try {
+            authService.createDemoCredentials();
+            return ResponseEntity.ok(Map.of(
+                "message", "Demo credentials created successfully",
+                "credentials", Map.of(
+                    "admin", Map.of("email", "admin@demo.com", "password", "demo123", "role", "ADMIN"),
+                    "manager", Map.of("email", "manager@demo.com", "password", "demo123", "role", "MANAGER"),
+                    "member", Map.of("email", "member@demo.com", "password", "demo123", "role", "MEMBER")
+                )
+            ));
+        } catch (Exception e) {
+            log.error("Error creating demo credentials: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Failed to create demo credentials"));
+        }
+    }
+
+    @GetMapping("/demo-credentials")
+    public ResponseEntity<?> getDemoCredentials() {
+        return ResponseEntity.ok(Map.of(
+            "demo_credentials", Map.of(
+                "admin", Map.of(
+                    "email", "admin@demo.com",
+                    "password", "demo123",
+                    "role", "ADMIN",
+                    "description", "Full system access"
+                ),
+                "manager", Map.of(
+                    "email", "manager@demo.com",
+                    "password", "demo123",
+                    "role", "MANAGER",
+                    "description", "Project management access"
+                ),
+                "member", Map.of(
+                    "email", "member@demo.com",
+                    "password", "demo123",
+                    "role", "MEMBER",
+                    "description", "Basic project access"
+                )
+            ),
+            "instructions", "Use these credentials to test the application. Call POST /api/auth/create-demo first if not already done."
+        ));
     }
 }

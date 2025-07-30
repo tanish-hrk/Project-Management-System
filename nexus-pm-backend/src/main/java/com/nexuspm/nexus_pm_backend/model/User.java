@@ -28,7 +28,7 @@ public class User implements UserDetails {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
     
-    @Column(name = "password_hash", nullable = false)
+    @Column(name = "password_hash")
     private String passwordHash;
     
     @Column(name = "first_name", nullable = false)
@@ -39,6 +39,13 @@ public class User implements UserDetails {
     
     @Column(name = "avatar_url")
     private String avatarUrl;
+    
+    // OAuth2 fields
+    @Column(name = "provider")
+    private String provider; // "local", "google", etc.
+    
+    @Column(name = "provider_id")
+    private String providerId; // OAuth2 provider's user ID
     
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
@@ -129,7 +136,16 @@ public class User implements UserDetails {
     
     @Override
     public boolean isEnabled() {
-        return isActive && isEmailVerified;
+        return isActive;
+    }
+    
+    // Helper methods for OAuth2
+    public boolean isOAuth2User() {
+        return provider != null && !provider.equals("local");
+    }
+    
+    public boolean hasPassword() {
+        return passwordHash != null && !passwordHash.isEmpty();
     }
     
     // Helper methods

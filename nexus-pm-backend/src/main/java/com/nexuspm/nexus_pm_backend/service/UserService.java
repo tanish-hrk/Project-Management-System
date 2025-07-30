@@ -174,6 +174,17 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public User createOAuth2User(User user) {
+        // For OAuth2 users, we don't encode password as they don't have one
+        User savedUser = userRepository.save(user);
+        log.info("OAuth2 user created successfully with email: {}", user.getEmail());
+        return savedUser;
+    }
+
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
+
     @Transactional(readOnly = true)
     public long countActiveUsers() {
         return userRepository.countActiveUsers();

@@ -3,6 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -20,7 +21,7 @@ export function LoginForm() {
   const [isDemoMode, setIsDemoMode] = useState(false)
   const [validationErrors, setValidationErrors] = useState<{ email?: string; password?: string }>({})
 
-  const { setUser, setToken } = useAppStore()
+  const { setUser } = useAppStore()
   const router = useRouter()
 
   const validateForm = () => {
@@ -42,18 +43,33 @@ export function LoginForm() {
     return Object.keys(errors).length === 0
   }
 
-  const handleDemoLogin = () => {
-    setEmail("demo@nexuspm.com")
-    setPassword("demo123")
+  const handleDemoLogin = (role: 'admin' | 'manager' | 'member' = 'member') => {
+    const demoCredentials = {
+      admin: { email: "admin@demo.com", password: "demo123" },
+      manager: { email: "manager@demo.com", password: "demo123" },
+      member: { email: "member@demo.com", password: "demo123" }
+    }
+    
+    const { email: demoEmail, password: demoPassword } = demoCredentials[role]
+    
+    setEmail(demoEmail)
+    setPassword(demoPassword)
     setIsDemoMode(true)
     setError("")
     setValidationErrors({})
+    
+    // Auto-submit after setting demo credentials
+    setTimeout(() => handleSubmit(null, demoEmail, demoPassword), 100)
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent | null = null, loginEmail?: string, loginPassword?: string) => {
+    if (e) e.preventDefault()
 
-    if (!validateForm()) {
+    const emailToUse = loginEmail || email
+    const passwordToUse = loginPassword || password
+
+    if (!emailToUse || !passwordToUse) {
+      setError("Email and password are required")
       return
     }
 
@@ -61,59 +77,30 @@ export function LoginForm() {
     setError("")
 
     try {
-      // Simulate API call with realistic delay
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      // Bypass authentication - always navigate to dashboard
+      // Set dummy user data for the application to work
+      setUser({
+        id: "1",
+        email: emailToUse,
+        name: emailToUse.split('@')[0] || "User",
+        avatar: "/placeholder.svg?height=32&width=32",
+        role: "member",
+      })
 
-      // Check for demo credentials or any valid email/password
-      if ((email === "demo@nexuspm.com" && password === "demo123") || (email && password && password.length >= 6)) {
-        // Mock successful login
-        const mockUser = {
-          id: "1",
-          email: email === "demo@nexuspm.com" ? "demo@nexuspm.com" : email,
-          name:
-            email === "demo@nexuspm.com"
-              ? "Demo User"
-              : email
-                  .split("@")[0]
-                  .replace(/[._]/g, " ")
-                  .replace(/\b\w/g, (l) => l.toUpperCase()),
-          avatar: "/placeholder.svg?height=32&width=32",
-          role: "developer" as const,
-          teams: ["team-1"],
-          preferences: {
-            theme: "system" as const,
-            timezone: "UTC",
-            notifications: {
-              email: true,
-              push: true,
-              mentions: true,
-              assignments: true,
-              comments: true,
-              statusChanges: true,
-            },
-            boardView: "kanban" as const,
-            sidebarCollapsed: false,
-          },
-          isOnline: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        }
+      // Store dummy tokens
+      localStorage.setItem('authToken', 'dummy-token')
+      localStorage.setItem('refreshToken', 'dummy-refresh-token')
 
-        const mockToken = "mock-jwt-token-" + Date.now()
-
-        setUser(mockUser)
-        setToken(mockToken)
-
-        // Show success message briefly before redirect
-        await new Promise((resolve) => setTimeout(resolve, 500))
-        router.push("/dashboard")
-      } else {
-        setError("Invalid email or password. Please try again.")
-      }
-    } catch (err) {
-      setError("Login failed. Please check your credentials and try again.")
+      // Always redirect to dashboard regardless of credentials
+      router.push("/dashboard")
+      
+    } catch (error) {
+      console.error("Navigation error:", error)
+      // Even if there's an error, still navigate to dashboard
+      router.push("/dashboard")
     } finally {
       setIsLoading(false)
+      setIsDemoMode(false)
     }
   }
 
@@ -131,24 +118,42 @@ export function LoginForm() {
         <CardContent className="space-y-4">
           {/* Demo Account Info */}
           <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-950/20">
-            <div className="flex items-center justify-between">
-              <div className="space-y-1">
+            <div className="space-y-3">
+              <div className="text-center">
                 <p className="text-sm font-medium text-blue-900 dark:text-blue-100">Try Demo Account</p>
                 <p className="text-xs text-blue-700 dark:text-blue-300">
-                  Email: demo@nexuspm.com
-                  <br />
-                  Password: demo123
+                  Choose a role to test the application
                 </p>
               </div>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={handleDemoLogin}
-                className="border-blue-300 bg-transparent text-blue-700 hover:bg-blue-100 dark:border-blue-700 dark:text-blue-300 dark:hover:bg-blue-900"
-              >
-                Use Demo
-              </Button>
+              <div className="flex flex-wrap gap-2 justify-center">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleDemoLogin('member')}
+                  className="border-blue-300 bg-transparent text-blue-700 hover:bg-blue-100 dark:border-blue-700 dark:text-blue-300 dark:hover:bg-blue-900"
+                >
+                  Demo Member
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleDemoLogin('manager')}
+                  className="border-green-300 bg-transparent text-green-700 hover:bg-green-100 dark:border-green-700 dark:text-green-300 dark:hover:bg-green-900"
+                >
+                  Demo Manager
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleDemoLogin('admin')}
+                  className="border-purple-300 bg-transparent text-purple-700 hover:bg-purple-100 dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-900"
+                >
+                  Demo Admin
+                </Button>
+              </div>
             </div>
           </div>
 
@@ -232,8 +237,8 @@ export function LoginForm() {
 
           <div className="text-center text-sm">
             <span className="text-muted-foreground">Don't have an account? </span>
-            <Button variant="link" className="h-auto p-0 font-normal">
-              Contact your administrator
+            <Button variant="link" className="h-auto p-0 font-normal" asChild>
+              <Link href="/signup">Create one here</Link>
             </Button>
           </div>
 

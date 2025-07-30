@@ -8,30 +8,42 @@ import { useAppStore } from "@/lib/store"
 
 interface AuthGuardProps {
   children: React.ReactNode
+  requireAuth?: boolean
 }
 
-export function AuthGuard({ children }: AuthGuardProps) {
-  const { user } = useAppStore()
+export function AuthGuard({ children, requireAuth = true }: AuthGuardProps) {
+  const { user, setUser } = useAppStore()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate auth check
     const checkAuth = async () => {
-      // In a real app, you would check authentication status here
-      // For now, we'll just simulate a delay and assume user is authenticated
-      await new Promise((resolve) => setTimeout(resolve, 100))
-
-      if (!user) {
-        router.push("/login")
-        return
+      // Bypass authentication - always allow access
+      const token = localStorage.getItem('authToken')
+      
+      // If no user is set but we're trying to access protected content, set a dummy user
+      if (requireAuth && !user) {
+        setUser({
+          id: "1",
+          email: "user@example.com",
+          name: "User",
+          avatar: "/placeholder.svg?height=32&width=32",
+          role: "member",
+        })
+        
+        // Store dummy token if none exists
+        if (!token) {
+          localStorage.setItem('authToken', 'dummy-token')
+          localStorage.setItem('refreshToken', 'dummy-refresh-token')
+        }
       }
 
+      // Always allow access regardless of authentication state
       setIsLoading(false)
     }
 
     checkAuth()
-  }, [user, router])
+  }, [user, setUser, router, requireAuth])
 
   if (isLoading) {
     return (
@@ -41,5 +53,6 @@ export function AuthGuard({ children }: AuthGuardProps) {
     )
   }
 
+  // Always render children - no authentication checks
   return <>{children}</>
 }

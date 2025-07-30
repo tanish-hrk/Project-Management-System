@@ -18,6 +18,7 @@ import { NotificationDropdown } from "./notification-dropdown"
 import { Menu, Bell, Settings, User, LogOut, ChevronDown, Zap } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
+import { useAppStore } from "@/lib/store"
 
 interface TransparentTabBarProps {
   onSidebarToggle: () => void
@@ -26,11 +27,40 @@ interface TransparentTabBarProps {
 
 export function TransparentTabBar({ onSidebarToggle, sidebarOpen }: TransparentTabBarProps) {
   const [mounted, setMounted] = useState(false)
-  const router = useRouter();
+  const router = useRouter()
+  const { user, setUser } = useAppStore()
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  const handleLogout = async () => {
+    try {
+      // Call backend logout endpoint
+      const token = localStorage.getItem('authToken')
+      if (token) {
+        await fetch('http://localhost:8080/api/auth/logout', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        })
+      }
+    } catch (error) {
+      console.error('Logout error:', error)
+    } finally {
+      // Clear local storage
+      localStorage.removeItem('authToken')
+      localStorage.removeItem('refreshToken')
+      
+      // Clear user from store
+      setUser(null)
+      
+      // Redirect to login page
+      router.push('/login')
+    }
+  }
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -97,15 +127,21 @@ export function TransparentTabBar({ onSidebarToggle, sidebarOpen }: TransparentT
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-8 px-2 text-white/90 hover:text-white hover:bg-white/10">
                   <Avatar className="h-6 w-6 mr-2">
-                    <AvatarImage src="/placeholder.svg?height=24&width=24" />
-                    <AvatarFallback className="bg-blue-600 text-white text-xs">JD</AvatarFallback>
+                    <AvatarImage src={user?.avatar || "/placeholder.svg?height=24&width=24"} />
+                    <AvatarFallback className="bg-blue-600 text-white text-xs">
+                      {user?.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U'}
+                    </AvatarFallback>
                   </Avatar>
-                  <span className="hidden sm:inline text-sm font-medium">John Doe</span>
+                  <span className="hidden sm:inline text-sm font-medium">
+                    {user?.name || 'User'}
+                  </span>
                   <ChevronDown className="h-3 w-3 ml-1" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 bg-black/95 border-gray-700 text-white">
-                <DropdownMenuLabel className="text-gray-300">My Account</DropdownMenuLabel>
+                <DropdownMenuLabel className="text-gray-300">
+                  {user?.email || 'My Account'}
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-gray-700" />
                 <DropdownMenuItem className="focus:bg-gray-800 cursor-pointer" onClick={() => router.push("/profile")}>
                   <User className="mr-2 h-4 w-4" />
@@ -116,7 +152,10 @@ export function TransparentTabBar({ onSidebarToggle, sidebarOpen }: TransparentT
                   <span>Settings</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-gray-700" />
-                <DropdownMenuItem className="focus:bg-gray-800 cursor-pointer text-red-400">
+                <DropdownMenuItem 
+                  className="focus:bg-gray-800 cursor-pointer text-red-400 hover:text-red-300"
+                  onClick={handleLogout}
+                >
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                 </DropdownMenuItem>

@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-@Slf4j
-@Component
+// @Slf4j
+// @Component
 public class JwtTokenUtil {
 
     @Value("${app.jwt.secret}")

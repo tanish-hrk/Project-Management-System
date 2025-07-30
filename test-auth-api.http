@@ -1,0 +1,68 @@
+### Test Authentication API Endpoints
+
+### 1. Health Check
+GET http://localhost:8080/api/actuator/health
+Accept: application/json
+
+### 2. Register a new user
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "testPassword123",
+  "fullName": "Test User"
+}
+
+### 3. Login with credentials
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "testPassword123"
+}
+
+### 4. Login with demo credentials (Admin)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@demo.com",
+  "password": "demo123"
+}
+
+### 5. Login with demo credentials (Manager)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "manager@demo.com",
+  "password": "demo123"
+}
+
+### 6. Login with demo credentials (Member)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "member@demo.com",
+  "password": "demo123"
+}
+
+### 7. Access H2 Console (in browser)
+# http://localhost:8080/api/h2-console
+# JDBC URL: jdbc:h2:mem:testdb
+# User: sa
+# Password: (empty)
+
+### 8. Get demo credentials info
+POST http://localhost:8080/api/auth/demo-credentials
+Content-Type: application/json
+
+### 9. OAuth2 Google Login (redirect to Google)
+GET http://localhost:8080/api/oauth2/authorization/google
+
+### 10. Test protected endpoint (requires JWT token)
+GET http://localhost:8080/api/test/protected
+Authorization: Bearer [YOUR_JWT_TOKEN_HERE]

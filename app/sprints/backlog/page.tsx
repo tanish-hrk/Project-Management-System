@@ -17,7 +17,6 @@ import {
   ArrowUp,
   ArrowDown,
   Filter,
-  Sort,
   MoreVertical,
   Edit,
   Trash2,

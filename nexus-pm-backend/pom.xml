@@ -107,6 +107,12 @@
 			<version>3.2.0</version>
 		</dependency>
 
+		<!-- OAuth2 Client for Google Authentication -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-client</artifactId>
+		</dependency>
+
 		<!-- Apache Commons for file upload -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -122,6 +128,12 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- H2 Database for testing -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
